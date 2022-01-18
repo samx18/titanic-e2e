@@ -1,0 +1,429 @@
+{
+  "metadata": {
+    "version": 1,
+    "disable_limits": false
+  },
+  "nodes": [
+    {
+      "node_id": "364c678b-0528-48b2-a44c-207dd9727f39",
+      "type": "SOURCE",
+      "operator": "sagemaker.s3_source_0.1",
+      "parameters": {
+        "dataset_definition": {
+          "__typename": "S3CreateDatasetDefinitionOutput",
+          "datasetSourceType": "S3",
+          "name": "train.csv",
+          "description": null,
+          "s3ExecutionContext": {
+            "__typename": "S3ExecutionContext",
+            "s3Uri": "s3://sagemaker-us-east-1-967669495843/sampal-demo/train.csv",
+            "s3ContentType": "csv",
+            "s3HasHeader": true,
+            "s3FieldDelimiter": ",",
+            "s3DirIncludesNested": false,
+            "s3AddsFilenameColumn": false
+          }
+        }
+      },
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "937b98cf-03d7-4efb-bb5e-d94f098775ad",
+      "type": "TRANSFORM",
+      "operator": "sagemaker.spark.infer_and_cast_type_0.1",
+      "parameters": {},
+      "trained_parameters": {
+        "schema": {
+          "PassengerId": "long",
+          "Survived": "long",
+          "Pclass": "long",
+          "Name": "string",
+          "Sex": "string",
+          "Age": "long",
+          "SibSp": "long",
+          "Parch": "long",
+          "Ticket": "string",
+          "Fare": "float",
+          "Cabin": "string",
+          "Embarked": "string"
+        }
+      },
+      "inputs": [
+        {
+          "name": "default",
+          "node_id": "364c678b-0528-48b2-a44c-207dd9727f39",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "454569d7-7b36-40ae-afbb-34c064f75b5b",
+      "type": "VISUALIZATION",
+      "operator": "sagemaker.visualizations.multicolinearity_0.1",
+      "parameters": {
+        "name": "Untitled",
+        "analysis": "Variance inflation factors"
+      },
+      "inputs": [
+        {
+          "name": "df",
+          "node_id": "937b98cf-03d7-4efb-bb5e-d94f098775ad",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "0f57c85d-bd23-4523-b35d-5c09e2c6ba23",
+      "type": "VISUALIZATION",
+      "operator": "sagemaker.visualizations.histogram_0.1",
+      "parameters": {
+        "name": "Survival_age",
+        "x_axis": "Age",
+        "color_by": "Survived"
+      },
+      "inputs": [
+        {
+          "name": "df",
+          "node_id": "937b98cf-03d7-4efb-bb5e-d94f098775ad",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "cf5cda83-9578-4bb1-93ed-ba13ca74ce61",
+      "type": "VISUALIZATION",
+      "operator": "sagemaker.visualizations.feature_correlation_0.1",
+      "parameters": {
+        "name": "Feature Correlation",
+        "correlation_type": "non-linear"
+      },
+      "inputs": [
+        {
+          "name": "df",
+          "node_id": "937b98cf-03d7-4efb-bb5e-d94f098775ad",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "5f665d73-a44d-4bd0-a743-e08d6df516d2",
+      "type": "VISUALIZATION",
+      "operator": "sagemaker.visualizations.bias_report_0.1",
+      "parameters": {
+        "name": "BiasSex",
+        "is_label_value_or_threshold": "value",
+        "is_facet_value_or_threshold": "value",
+        "default_metrics": {
+          "CI": true,
+          "DPL": true,
+          "JS": true,
+          "CDDL": false
+        },
+        "group_name": "",
+        "show_additional_metrics": "no",
+        "label_values": "1",
+        "facet_values": "",
+        "label_name": "Survived",
+        "facet_name": "Sex",
+        "metrics": {
+          "CI": true,
+          "DPL": true,
+          "JS": true,
+          "CDDL": false
+        }
+      },
+      "inputs": [
+        {
+          "name": "df",
+          "node_id": "937b98cf-03d7-4efb-bb5e-d94f098775ad",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "c7b584dc-d29c-47fe-93e3-895116d073aa",
+      "type": "VISUALIZATION",
+      "operator": "sagemaker.visualizations.scatterplot_0.1",
+      "parameters": {
+        "name": "survival_fare",
+        "x_axis": "Fare",
+        "y_axis": "Age",
+        "color_by": "Survived"
+      },
+      "inputs": [
+        {
+          "name": "df",
+          "node_id": "937b98cf-03d7-4efb-bb5e-d94f098775ad",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "ff7b6dd2-a9e8-4e7b-9e74-58b58d1b508f",
+      "type": "VISUALIZATION",
+      "operator": "sagemaker.visualizations.quick_model_0.1",
+      "parameters": {
+        "name": "quickM",
+        "label": "Survived"
+      },
+      "inputs": [
+        {
+          "name": "df",
+          "node_id": "937b98cf-03d7-4efb-bb5e-d94f098775ad",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "e99d20be-1e4c-467c-a36a-50ab87c1fcd1",
+      "type": "TRANSFORM",
+      "operator": "sagemaker.spark.handle_missing_0.1",
+      "parameters": {
+        "operator": "Impute",
+        "impute_parameters": {
+          "column_type": "Numeric",
+          "numeric_parameters": {
+            "strategy": "Approximate Median",
+            "input_column": "Age"
+          }
+        }
+      },
+      "inputs": [
+        {
+          "name": "df",
+          "node_id": "937b98cf-03d7-4efb-bb5e-d94f098775ad",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "0c8b6eb0-ab69-4809-ab78-ff575216fdde",
+      "type": "TRANSFORM",
+      "operator": "sagemaker.spark.manage_columns_0.1",
+      "parameters": {
+        "operator": "Drop column",
+        "drop_column_parameters": {
+          "column_to_drop": "Name"
+        }
+      },
+      "inputs": [
+        {
+          "name": "df",
+          "node_id": "e99d20be-1e4c-467c-a36a-50ab87c1fcd1",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "1f249872-e026-41a7-858e-4a04639fbe4d",
+      "type": "TRANSFORM",
+      "operator": "sagemaker.spark.manage_columns_0.1",
+      "parameters": {
+        "operator": "Drop column",
+        "drop_column_parameters": {
+          "column_to_drop": "Ticket"
+        }
+      },
+      "inputs": [
+        {
+          "name": "df",
+          "node_id": "0c8b6eb0-ab69-4809-ab78-ff575216fdde",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "fe6fff11-8693-4c90-98c2-b5c968272b2c",
+      "type": "TRANSFORM",
+      "operator": "sagemaker.spark.manage_columns_0.1",
+      "parameters": {
+        "operator": "Drop column",
+        "drop_column_parameters": {
+          "column_to_drop": "Cabin"
+        }
+      },
+      "inputs": [
+        {
+          "name": "df",
+          "node_id": "1f249872-e026-41a7-858e-4a04639fbe4d",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "fe942e75-1afc-4a57-81e0-3de1c32e4971",
+      "type": "TRANSFORM",
+      "operator": "sagemaker.spark.encode_categorical_0.1",
+      "parameters": {
+        "operator": "One-hot encode",
+        "one_hot_encode_parameters": {
+          "invalid_handling_strategy": "Keep",
+          "drop_last": false,
+          "output_style": "Columns",
+          "input_column": "Sex"
+        },
+        "ordinal_encode_parameters": {
+          "invalid_handling_strategy": "Replace with NaN"
+        }
+      },
+      "trained_parameters": {
+        "one_hot_encode_parameters": {
+          "_hash": -1767228197713558300,
+          "string_indexer_model": "P)h>@6aWAK2mmvsWK$OCG&0-(003bD000vJ003=ebYWy+bYU-WVRCdWFfcGMFm;YiZ^AGTMDP6>dk&T<O-Q-Y3kO6cs$Qd2ya5Y;v9>EH%73q$N|h>=>uBDaxj}C*Mp%L8gTR3Okwgs0Ct-~k2vcSf`^4HEHcrunc<U7zs32)eF`*5xnm3C^*6q`C``FYKO#C}>)ZP{ILP#NJXg}Rd7A|X5!avGxXosb2Wxb?%Q!0f=yTxL@fzK)AwDzVziEQY4|Glo=Z@Q;T36AKLp^f`MGYy=G0*n<X8ZevmdPjNxN7w!IiaSoF9V_CuYoLM+Oy^9lzrIlH|5+zy&oGV;Ur<W}1QY-O00;mxrDRhMJbdmB0000C0000O0001OWprU=VRT_HE^uLTbS*G2FfcGKV{&6lE=p!#U|?b}GI=2e08mQ<1QY-O00;mxrDRiO<My720RRAi0ssI=0001FVRT_HaA9(EEif=JFfc7MVK6l|H8?pfFf%w~Ei_~^Vl6l_W@9a3IAk+6IbmZmIAUQfV=yo<E^}^SaBz7paA9(Bb!BvoQb9|@Fci+ZS_kf$kwOnMFxg;+*3P;O59&!gh=>P4MA9|UV%p6nQ)KKa{xkoUZ*J;z2wsx+zVCbQ<$L7p@I1f>AK`;Gwjpq^<3*@xXIu&5NHMz+LYrP0&T<9WrFDB7tyMZR!U1e9!IrCzt9rzX`x`yD0}NYe*CHE=$3p4DqTtWi!VcQCiLFv?=JdKyA``j!P2p<en`|Idvs};hwkjU3x(x@pm&<)Wiay0Z5^UA%+H0xyQrfEQuefqO@QYv?^aqiJ+%_S@;+F9d2Mg@O4SN)YPKP;J3z^S+L|Q8f{h$~G4`X3iF??c~Fg)Rglef}@n&*+AeX30{9vIrDG8HP(w0||BInQR)k`v(P`mZ{^fER`?{=v>>rTHzugJEuXn(NcCQnU{*5Ys=v91<QYF$dc8(*n$zPOqnkoGc7(XGMLnk$S)ap9S@1JWf?o_hm1UoiGtn#@((=_GCATq9h8VUeN9AgrP4xQJnNzuIItV16cbR{JnQjO9KQH0000805hdzQ@6yhTM_^O01yBG08Ib@0AyiwVJ|LlVRCdWFfcGMFfB7-Ff}$cI5{maGdN={G-NYkEjTh}V=ZAgWHUB7VPi5lVqq;~FfcGKb8ca9aCt6pVRCVGWpplMa$`#_N@ieSU}AVb@vzIAOLIa2P)h*<6ay3h000O8Go@rx7U(oG+yDRoVF3UD6951J0000000000q=5hc003=ebYWy+bYU-WVRCdWFfcGMFi=YY0u%!j0000805hdzQw}_Q?hXI|01N;C02lxO00000000000HlEp0RRAPWprU=VRT_HE^uLTbS*G2FfcGKV{&6qO928D0~7!N00;mxrDRiO<My720RRAi0ssI=00000000000001_fl&bf0AyiwVJ~oDa&#>)FfcGMEi+*-H8wRkIV~_VIAbj|WHVwdI5K8qEnzrhGd4M4V=_2mVJ%}YFfcB2Zeeh6c`k5aa&dKKbWlqH0u%!j0000805hdzQ@6yhTM_^O01yBG08Ib@00000000000HlFG0{{SIVRT_HE^uLTbS*G2FfcGJGhr|_HZ?doEif}UV=XjfGh!_`GG=2fVK`(nHaTHqGB{#kEn_e+FfMa$VQ_GHE^uLTadl;ME@N_IP)h{{000001ONm8cmV(ayaNCL000",
+          "one_hot_encoder_model": "P)h>@6aWAK2mmvsWK-T+Zfn#4003zL000vJ003=ebYWy+bYU-WVRCdWFfcGMFm;Z*PQySDMSDJDYG>uJPB3l}5=cZ)(XNK|m{{yfv%3^T{&$8TkW#prVsy{B_XO5q&M-jacZCV<kyK8|AIdv55thoNo&!C^avy9Qi4SrdG*D(wxu8!lZ1;NK?)vVw?{wF|nSUkDa|~kEs#Wa<{a4tu!qs_{=Y`VX?#909Yuk@{D-q$*A5hFEh_$3z?xGXO6!OW~=**93<d~i?7Z@gVnHo4^7#%%^Pju%FVva1qIs6;`1h5EC6INGVR?5~F8uOdG*ig8xPFR+!Z%|7E1QY-O00;mxrDRk1Q672@0000C0000O0001OWprU=VRT_HE^uLTbS*G2FfcGKV{&6lE=p!#U|?d%&WpMS08mQ<1QY-O00;mxrDRjyIq2Mg0RR9n0ssI=0001FVRT_HaA9(EEif=JFfc7JFfcY@H8C|UH)1(8Ei_^|W-T~oGGZ+>VKQYfIbt+4He@j^V=yo<E^}^SaBz7paA9(Bb!BvYQcX|eFc5X!QaCIJ4vrithsqKaNWn@-32DUvZmZR5g@7AE$Zc$haFSxXyDCtLpTQ60hcNvBEkeSF@qD~D^TzV&$yrPgVWb-p3{IQ01KMgLgqGGrJO4#+wvI8_CYpy$ytoMVfB*bp$HLrQ+tIBo1;OY5)6J1^@}@S^^Ws5TXx~N$E!xtBbpRlE8_{*CWhpC%JnRR4(A@~2*>)TG*=O>C^bRK2!`_qk+~{r`eWTS6U>_JWuRM7e`5~pXx#40gKqO!2<$tBIMP1RgghxC=boUFw-fIrd{X{x$>VLeHPUOM~`qFr0ZaS81z^pTqkz*lKh19uagUd%&iE>{0v<4uSj1Q(TMob~STJ2()Eh->M1Nl*1IZ;&h&qQlBP(oWd3t0t`7;1pRU>UM^P0)BYyP6^TYo&OvG@aFootVcFk2^cVNul#jr24t)CAm~;m}M$IR9Tv)d77mCIP2{vNu+w|Fz@gBK>#oK+Cb<O{>mFrO9KQH0000805hdzQ;)i&vJwCQ01yBG08Ib@0AyiwVJ|LlVRCdWFfcGMFfA}JFg9T|F*PkWVmUP}G-5esEjVT}Vl6abGG#D1Vl*^1WHBvcFfcGKb8ca9aCt6pVRCVGWpplMa$`#_N@ieSU}Bgf6f1V_pOqN^P)h*<6ay3h000O8Go@rx-db*J)BpegX#oHL6951J0000000000q=5hc003=ebYWy+bYU-WVRCdWFfcGMFi=YY0u%!j0000805hdzQ}|IHdJX^p01N;C02lxO00000000000HlEh0RRAPWprU=VRT_HE^uLTbS*G2FfcGKV{&6qO928D0~7!N00;mxrDRjyIq2Mg0RR9n0ssI=00000000000001_fk^=X0AyiwVJ~oDa&#>)FfcGMEif=JHeod}H7z${IW;XbVmW3lIA$_pEi_>=WiUBnG&DA3F)d>-FfcB2Zeeh6c`k5aa&dKKbWlqH0u%!j0000805hdzQ;)i&vJwCQ01yBG08Ib@00000000000HlF00{{SIVRT_HE^uLTbS*G2FfcGJFfcGSVKp%|EjMC0H7zt^Ic6<5W-?+eG+{DjFgap0G&W>0En_e+FfMa$VQ_GHE^uLTadl;ME@N_IP)h{{000001ONm8cmV(atOEc5000"
+        }
+      },
+      "inputs": [
+        {
+          "name": "df",
+          "node_id": "fe6fff11-8693-4c90-98c2-b5c968272b2c",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "7a4bfa6c-dfaa-4b1e-9b19-907199ddeced",
+      "type": "TRANSFORM",
+      "operator": "sagemaker.spark.encode_categorical_0.1",
+      "parameters": {
+        "operator": "One-hot encode",
+        "one_hot_encode_parameters": {
+          "invalid_handling_strategy": "Keep",
+          "drop_last": false,
+          "output_style": "Columns",
+          "input_column": "Embarked"
+        },
+        "ordinal_encode_parameters": {
+          "invalid_handling_strategy": "Replace with NaN"
+        }
+      },
+      "trained_parameters": {
+        "one_hot_encode_parameters": {
+          "_hash": -1767228197713558300,
+          "string_indexer_model": "P)h>@6aWAK2moWHWK+6@gAL*U003qI000vJ003=ebYWy+bYU-WVRCdWFfcGMFm;YiPXaL%Mfd)Uw;r162o7wK1q-5y#_i<MzJUq-;<Ys*ng4DX6N8CvZ|*(ko<SLm5f<QiCorJelZXNNAgmD`VaiP6C2{X|Yp3ahc;hu0s37&0VnQ2WaXYJLa@tIr2RUyl824|)vG=Z!YaxZ4p#5|cS$4VCCH#eK@3wV)uT@RWT$M`MqupR3pTXx8a$0&*Mu}`_mA}|~_mi&dw)jYwbdOFOTDx~Nqvb#pV5mS-huNg(D{dSQJh3KzJq0S|j_H`msna9H%ZqFC|99K=yZ48km_5TV+<XC0O9KQH000080Ar<OQ$@xWi4Fh&01N;C02lxO0BvP-VPs)+VJ|LlVRCdWFfcGMFfL<qV@obdW?*1oV&H9V-30(pO9KQH000080Ar<OQ&X}0#ex9<0BiyP07w7;0AyiwVJ~oDa&#>)FfcGMEoEdiWnwpGWi2;3WnnEeIWlG~IAb<2En+k@HDYBkGi5b7HZ5Z?FfcB2Zeeh6c`k5aa&dKKbd6G5O9DX@p51H}@^zM3SV9IA0~>Z*-Bct9dx##wE)PLO%(}C-G`s4|Scv%h`df`@cY<CH=X~F}eTOqRzVso0J$TfBmUb*?xgn?<SIFoC0CwFiZMW*6U=&X>0~k8GTABXJTtL&|r)4>z;_+S%A6Q1A30fxF;WT1g9t%O|(1aFf6;OevQmyGC<1Ayj`boiZ^^>duV4IHXxV4fC%TCn-&dt}pZ$<CP-vVgbmMv^mEA>94IIb24^bFlq*d}lq2#v*v&<WLhlQ#+Ei3ypGbF>{0k9Yv>{mPJ2PP8+fF-64qnPg1Sm@0~1j0INn3Bz41m6#0`Zr~(kJeIh7yTCckR@9gEHNVdPsG}QrqvHA>>}pn;k2E|S=ZdDeJfCrnyLtn*`~%E&KqJo9Km)%^(6g4yyCpzp8-e?osBA7$@rmydzfzB8DUT~&(utF15VItS+U+DhOxj@>#$gb4{C4vo2)v{jMsa7)ab11zn!fr#|Jf^0O9KQH000080Ar<OQ`LfxIuZZ?01yBG08Ib@0AyiwVJ|LlVRCdWFfcGMFfC<dHDzKqW@RlmIb~rjG&wS6EjVK~FfC#<G&N#nF*9W~IW{e0FfcGKb8ca9aCt6pVRCVGWpplMa$`#_N@ieSU}9+Dxv}AsdQT4kP)h*<6ay3h000O8W2IzMx`l%c;s5{uW&r>I6951J0000000000q=5hc003=ebYWy+bYU-WVRCdWFfcGMFi=YY0u%!j000080Ar<OQ$@xWi4Fh&01N;C02lxO00000000000HlEv0RRAPWprU=VRT_HE^uLTbS*G2FfcGKV{&6qO928D0~7!N00;nMrDRi6vHZn?0RRAO0ssI=00000000000001_fmZ<l0AyiwVJ~oDa&#>)FfcGMEoEdiWnwpGWi2;3WnnEeIWlG~IAb<2En+k@HDYBkGi5b7HZ5Z?FfcB2Zeeh6c`k5aa&dKKbWlqH0u%!j000080Ar<OQ`LfxIuZZ?01yBG08Ib@00000000000HlFG0{{SIVRT_HE^uLTbS*G2FfcGJWn?vFVmD@GEjKx3VJ$Q{GG;9}V>U1?Vl*^0Vr4NiWi>fAEn_e+FfMa$VQ_GHE^uLTadl;ME@N_IP)h{{000001ONm8cmV(ayaNCL000",
+          "one_hot_encoder_model": "P)h>@6aWAK2moWHWK$a2sT<P(003zL000vJ003=ebYWy+bYU-WVRCdWFfcGMFqMuyPs1<}hIf93=hiZ$2}xE|sYq01Vzo}mg+};G=W~Zv`R^P>Aa!71@$mS4-uEtQaFDa=Rit+f35Fx;oPa*GcX~qLLZ}Y`cagVYh$GTo9;a4{XOEe|C)M9KRb%S5ZXX|-Zl$jN8&aNQkmgDoZPwt=VQs`K^C<A9(l%`k1~yoARVNYg!S6wuFX{+kbod-j;I1MPMUqS`oC-fhC(JVXWQXYN*T5WpKYqB-kz#s*%&MQjWn6^d1jX^|Kga&Q+}iKl%^Fj|Wx4wVP)h>@6aWAK2moWHWK%=$OCk;c000aC000;O003=ebYWy+bYU+paA9(EEif=JFfcA-a$`#_N@ieSU}BJ7c}ofaP)h>@6aWAK2moWHWK$VflDd8Y001xo002k;003lRbYU-WVRCdWFfcGMFfC*;VP<AII5#afG&DFZG-YBmEjVIiW-Vl5Wn*GyVKQW9VL2^hFfcGKb8ca9aCt6pVRCVGWpsT~O-m~=6is8TE_C4{Lk4D10v3fa%)F`Nw7Afnh=`~=c|6iiqQlF~)Ff4^7W^6hK!1q0wu&N{z~z3NbMLt!XNTu8L4=V`NH91p(h6v^i4dAw4{d#k;A|XVuuE{kVl>MV?4KO1*^w~+|JmV<ECs=67t{5jaPqn~lZ)a(T4>)wyG`2Eg>?WRcoWeTsbwiEhdk^De$ZJBpxI^%`Pp~!JLv;Vu!p@T@43-g-Ty_aAHY5^W>$IfF!Do6Yje%TNPtNGu9x3QV~e_?%L$Kogy{AUguT@qoZGQ<+|>8HluqQr3Hs7_WNtE&tk0}7<Dp|AQ-##IW&Nv1R*7;}`nCoj=8R9KFh)!uy;$vXo-HaMNdx&|T{%%y_H?W@>nowHoQAA|NDMSUVXzF@hbCw|o&KF7dc07)Q=0Z-#dgf&h{x@%!MM<QJ5s$|b(35wHOMlR@2M<J(>zVmUYvFRBuS*Y=^*cI`#}IN_}W0|4F1X+P)h>@6aWAK2moWHWK*v76;BcX000mG002z@003lRbYU+paA9(EEif=JFfc7-F=1wAIXE{hH#9UjEi`3fG%Yw{WM(a7Vr64uW??d9W??xkV=yo<E^}^SaBz7paA9(Bb!BueV{&6lE=p!#U|?ccm6G-C+&?Qb08mQ-0u%!j000080Ar<OQySW-8`A&)0BHdL022TJ00000000000HlEc0001OWprU=VRT_HaA9(EEif=JFfdR{0Rj{Q6aWAK2moWHWK%=$OCk;c000aC000;O0000000000005+c1OWg5ZDn*}WMOn+FD`Ila&#>)FfcGME@N_IP)h*<6ay3h000O8W2IzM8Ca6KegOagFaiJoNB{r;0000000000q=85Q003lRbYU-WVRCdWFfcGMFfC*;VP<AII5#afG&DFZG-YBmEjVIiW-Vl5Wn*GyVKQW9VL2^hFfcGKb8ca9aCt6pVRCVGWpq$W0Rj{Q6aWAK2moWHWK*v76;BcX000mG002z@0000000000005+cECT=lWMOn+FD`Ila&#>)FfcGMEo3oaW@b4!H!U|bG&n6ZWnwffIAUaGEo5S4V`64uGGu09IW1!_FfcB2Zeeh6c`k5aa&dKKbS`6ZV^B*41^@s600aO80C)ia0I3520000"
+        }
+      },
+      "inputs": [
+        {
+          "name": "df",
+          "node_id": "fe942e75-1afc-4a57-81e0-3de1c32e4971",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "ac3ed155-1ad0-47ac-997a-0dd968af3fb3",
+      "type": "TRANSFORM",
+      "operator": "sagemaker.spark.custom_pandas_0.1",
+      "parameters": {
+        "code": "# Table is available as variable `df`\n# Add unique ID and event time for features store\nimport time \nimport pandas as pd\ncurrent_time_sec = int(round(time.time()))\ndf['time'] = pd.Series([current_time_sec]*len(df), dtype=\"float64\")"
+      },
+      "inputs": [
+        {
+          "name": "df",
+          "node_id": "7a4bfa6c-dfaa-4b1e-9b19-907199ddeced",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    },
+    {
+      "node_id": "ac7bdc2e-5d22-4a7f-a5e7-cb34e2233981",
+      "type": "VISUALIZATION",
+      "operator": "sagemaker.visualizations.histogram_0.1",
+      "parameters": {
+        "name": "Survival_sex",
+        "x_axis": "Age",
+        "color_by": "Sex",
+        "facet_by": "Survived"
+      },
+      "inputs": [
+        {
+          "name": "df",
+          "node_id": "937b98cf-03d7-4efb-bb5e-d94f098775ad",
+          "output_name": "default"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "default"
+        }
+      ]
+    }
+  ]
+}
